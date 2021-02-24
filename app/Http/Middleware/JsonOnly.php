@@ -17,10 +17,9 @@ class JsonOnly extends Middleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->expectsJson()) {
             //406
-            //abort(404);
-        }
+            abort_if(!$request->expectsJson(),404,"Bah on demande pas du JSON ?");
+
         return $next($request);
     }
 }
