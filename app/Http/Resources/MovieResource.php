@@ -19,7 +19,7 @@ class MovieResource extends JsonResource
         });
 
         return [
-            'links'  => '/api/movies/'.$this->id,
+            'link'  => '/api/movies/'.$this->id,
             'id' => $this->id,
             'title'=>$this->title,
             'description'=>$this->description,

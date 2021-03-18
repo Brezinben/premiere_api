@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ActorCollection;
 use App\Http\Resources\ActorResource;
 use App\Models\Actor;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ActorController extends Controller
@@ -17,7 +20,7 @@ class ActorController extends Controller
      */
     public function index()
     {
-        $actors = Actor::with('movies')->whereIn('id',[3,4])->get(['id', 'first_name', 'last_name']);
+        $actors = Actor::with('movies')->whereIn('id', [3, 4])->get(['id', 'first_name', 'last_name']);
         return new ActorCollection($actors);
     }
 
@@ -78,12 +81,12 @@ class ActorController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Actor $actor
-     * @return bool
+     * @return bool|Application|ResponseFactory|Response
      */
     public function destroy(Actor $actor)
     {
         $deleted = DB::transaction(function () use ($actor) {
-            $r = $actor->movies()->detach();
+            $r = $actor->movies()->count() > 0 ? $actor->movies()->detach() : true;
             $m = $actor->delete();
             return $r && $m;
         });

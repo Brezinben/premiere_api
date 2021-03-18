@@ -90,7 +90,7 @@ class MovieController extends Controller
     public function destroy(Movie $movie)
     {
         $deleted = DB::transaction(function () use ($movie) {
-            $r = $movie->actors()->detach();
+            $r = $movie->actors()->count() > 0 ? $movie->actors()->detach() : true;
             $m = $movie->delete();
             return $r && $m;
         });

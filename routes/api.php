@@ -21,7 +21,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:api','jsonOnly'])->group(function () {
+Route::middleware(['jsonOnly','auth:sanctum'])->group(function () {
     Route::apiResource('actors',ActorController::class);
     Route::apiResource('movies',MovieController::class);
     Route::apiResource('categories',CategoryController::class);
